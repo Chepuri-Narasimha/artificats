@@ -19,6 +19,8 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    outputs:
+      script-file: ${{ steps.filename.outputs.file-name }}
     steps:
       - name: cloning code
         uses: actions/checkout@v4
@@ -33,6 +35,9 @@ jobs:
           path: |
             dist
             package.json
+      - name: fetching files name
+        id: filename
+        run: find dist/assets/*.js -type -f -execdir echo 'file-name={}' >> $GITHUB_OUPTPUTS ';'
 
   deploy:
     needs: build
@@ -46,4 +51,6 @@ jobs:
           name: build-artifacts
       - name: checking files
         run: ls -R
+      - name: displaying files name
+        run: echo  "${{ needs.build.outputs.script-file }}"
 
