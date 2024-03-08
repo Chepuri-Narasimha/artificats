@@ -9,7 +9,12 @@ jobs:
     steps:
       - name: cloning code
         uses: actions/checkout@v4
-      - name: Install denedencies 
+      - name: caching dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: deps-node-work-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies 
         run: npm ci
       - name: Lint code 
         run: npm run lint
@@ -24,6 +29,11 @@ jobs:
     steps:
       - name: cloning code
         uses: actions/checkout@v4
+      - name: caching dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: deps-node-work-${{ hashFiles('**/package-lock.json') }}
       - name: Install denedencies 
         run: npm ci
       - name: Building code 
